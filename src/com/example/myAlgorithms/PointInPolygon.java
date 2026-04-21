@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PointInPolygon {
-    /// Find if the given point is inside the given polygon by counting its intersections along the X axis.
+    /// Find if the given point is inside the given polygon by counting its intersections along the X axis. Takes a Point to test and an ordered Point[] that represents the polygon.
     public static boolean isInsidePolygon(Point q, Point[] polygon) {
         if (polygon.length < 3) {
             IO.println("A polygon must have at least 3 points!");
@@ -32,7 +32,7 @@ public class PointInPolygon {
         }
         return Math.floorMod(intersections, 2) == 1;
     }
-    /// Find whether the line is to the right of q at its height.
+    /// Find whether the line is to the right of q at q's Y value.
     private static boolean sufficientGradient (Point q, Point higher, Point lower) {
         //We want to avoid dividing by 0, and a line like this is parallel to the ray and should thus never intersect, anyway.
         if (higher.y == lower.y) {

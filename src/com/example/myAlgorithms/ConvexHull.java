@@ -8,7 +8,7 @@ import static com.example.myAlgorithms.OrientationTest.orientation;
 
 public class ConvexHull {
     static int DEBUG_checkCount = 0;
-
+    /// Takes in a Point[] that represents an unordered set of points on a plane. Returns an ordered List<Point> containing the minimum number of points required to enclose everything in the input.
     public static List<Point> convexHull(Point[] points) {
         DEBUG_checkCount = 0;
         if (points.length < 2) {
@@ -39,7 +39,7 @@ public class ConvexHull {
                 IO.println("[DEBUG] Loop count: " + DEBUG_loopCount + ", Check count: " + DEBUG_checkCount);
                 return output;
             }
-            Point potentialNextPoint = checkPoint(output.getLast(), currentPoint, startingList, startingPoint);
+            Point potentialNextPoint = checkPoint(output.getLast(), currentPoint, startingList);
             if (potentialNextPoint == startingPoint) {
                 IO.println("[DEBUG] Loop count: " + DEBUG_loopCount + ", Check count: " + DEBUG_checkCount);
                 return output;
@@ -52,7 +52,8 @@ public class ConvexHull {
             currentPoint = startingList.getFirst();
         }
     }
-    private static Point checkPoint(Point knownHullPoint, Point pointToCheck, List<Point> otherPoints, Point startingPoint) {
+    /// Takes in two points: the last known to be on the convex hull, and another to check (usually the first in the list of points not known to be on the hull), as well as a List<Points> of points not known to be on the hull. Returns a previously-unknown point on the hull.
+    private static Point checkPoint(Point knownHullPoint, Point pointToCheck, List<Point> otherPoints) {
         List<Point> tempList = new ArrayList<>(otherPoints);
         tempList.remove(pointToCheck);
         for (Point o : tempList) {
