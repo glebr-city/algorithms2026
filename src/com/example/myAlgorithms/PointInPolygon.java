@@ -34,6 +34,10 @@ public class PointInPolygon {
     }
     /// Find whether the line is to the right of q at its height.
     private static boolean sufficientGradient (Point q, Point higher, Point lower) {
+        //We want to avoid dividing by 0, and a line like this is parallel to the ray and should thus never intersect, anyway.
+        if (higher.y == lower.y) {
+            return false;
+        }
         Point potentialIntersection = new Point(higher.x - (higher.x - lower.x) / (higher.y - lower.y) * (higher.y - q.y), q.y);
         //Once again, being on the edge counts as "inside."
         return (potentialIntersection.x > q.x);
