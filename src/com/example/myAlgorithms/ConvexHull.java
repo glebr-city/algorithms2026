@@ -7,10 +7,10 @@ import java.util.List;
 import static com.example.myAlgorithms.OrientationTest.orientation;
 
 public class ConvexHull {
-    static int checkCount = 0;
+    static int DEBUG_checkCount = 0;
 
     public static List<Point> convexHull(Point[] points) {
-        checkCount = 0;
+        DEBUG_checkCount = 0;
         if (points.length < 2) {
             IO.println("Please provide a list of more than one point to avoid an infinite loop " +
         "(should really be more than three, but we are required to test this on a triangle)");
@@ -31,34 +31,34 @@ public class ConvexHull {
         //Remove it from the list until we have found a second hull point to make sure that we don't end early.
         startingList.remove(startingPoint);
         Point currentPoint = startingList.getFirst();
-        int loopCount = 0;
+        int DEBUG_loopCount = 0;
         while (true) {
-            loopCount++;
+            DEBUG_loopCount++;
             //We make use of our knowledge that the starting point is at the END of the list/
             if (currentPoint == startingPoint) {
-                IO.println("[DEBUG] Loop count: " + loopCount + ", Check count: " + checkCount);
+                IO.println("[DEBUG] Loop count: " + DEBUG_loopCount + ", Check count: " + DEBUG_checkCount);
                 return output;
             }
             Point potentialNextPoint = checkPoint(output.getLast(), currentPoint, startingList, startingPoint);
-            if (potentialNextPoint == currentPoint) {
-                if (output.size() == 1)
-                    //We need to make sure we close the polygon, so the starting point is added once again.
-                    startingList.addLast(startingPoint);
-                output.add(currentPoint);
-                startingList.remove(currentPoint);
-                currentPoint = startingList.getFirst();
-            } else {
-                currentPoint = potentialNextPoint;
+            if (potentialNextPoint == startingPoint) {
+                IO.println("[DEBUG] Loop count: " + DEBUG_loopCount + ", Check count: " + DEBUG_checkCount);
+                return output;
             }
+            if (output.size() == 1)
+            //We need to make sure we close the polygon, so the starting point is added once again.
+                startingList.addLast(startingPoint);
+            output.add(potentialNextPoint);
+            startingList.remove(potentialNextPoint);
+            currentPoint = startingList.getFirst();
         }
     }
     private static Point checkPoint(Point knownHullPoint, Point pointToCheck, List<Point> otherPoints, Point startingPoint) {
-        checkCount++;
         List<Point> tempList = new ArrayList<>(otherPoints);
         tempList.remove(pointToCheck);
         for (Point o : tempList) {
+            DEBUG_checkCount++;
             if (orientation(knownHullPoint, pointToCheck, o) < 0) {
-                    return o;
+                    pointToCheck = o;
             }
         }
         return pointToCheck;
@@ -79,7 +79,17 @@ public class ConvexHull {
         points2[5] = new Point(5, -5);
         points2[6] = new Point(0, 0);
         points2[7] = new Point(-1, -3);
-        ArrayList<Point[]> testCases = new ArrayList<>(Arrays.asList(points1, points2));
+        Point[] points3 = new Point[9];
+        points3[0] = new Point(9, 5);
+        points3[1] = new Point(5, 8);
+        points3[2] = new Point(8, 2);
+        points3[3] = new Point(2, 8);
+        points3[4] = new Point(8, 8);
+        points3[5] = new Point(4, 2);
+        points3[6] = new Point(0, 3);
+        points3[7] = new Point(7, 4);
+        points3[8] = new Point(4, 6);
+        ArrayList<Point[]> testCases = new ArrayList<>(Arrays.asList(points1, points2, points3));
         for (Point[] points : testCases) {
             StringBuilder sb = new StringBuilder();
             List<Point> outputList = convexHull(points);
